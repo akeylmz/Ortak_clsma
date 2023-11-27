@@ -55,8 +55,76 @@ def update_widget_attrs(field, attrs):
 
 
 # Create your views here.
+def expenses_edit(request, expenses_id):
+    expenses_edit = get_object_or_404(Expenses, id=expenses_id)
+    my_company = MyCompanyNames.objects.all()
+    supplier = Supplier.objects.all()
+    banks = Banks.objects.all()
+    details = Details.objects.all()
+   
+    if request.method == 'POST':
+        edit_form = ExpensesForm(request.POST, instance=expenses_edit)
+        
+        if edit_form.is_valid():
+          
+          edit_form.save()
+          return redirect('realized_cost', project_name=expenses_edit.ProjectName_Expenses)
+    else:
+        edit_form = ExpensesForm(instance=expenses_edit)
+    context = {
+        'edit_form': edit_form,
+        'expenses_edit': expenses_edit,
+        'my_company': my_company,
+        'supplier': supplier,
+        'banks': banks,
+        'details': details,
+    }
+    return render(request, "expenses_edit.html", context)
+
+def jobhistory_edit(request, jobhistory_id):
+    jobhistory_edit = get_object_or_404(JobHistory, id=jobhistory_id)
+    my_company = MyCompanyNames.objects.all()
+    supplier = Supplier.objects.all()
+    if request.method == 'POST':
+        edit_form = JobHistoryForm(request.POST, instance=jobhistory_edit)
+        
+        if edit_form.is_valid():
+          
+          edit_form.save()
+          return redirect('realized_cost', project_name=jobhistory_edit.ProjectName_JobHistory)
+    else:
+        edit_form = JobHistoryForm(instance=jobhistory_edit)
+    context = {
+        'edit_form': edit_form,
+        'jobhistory_edit': jobhistory_edit,
+        'my_company': my_company,
+        'supplier': supplier
+    }
+    return render(request, "jobhistory_edit.html", context)
+
+def income_edit(request, income_id):
+    income_edit = get_object_or_404(Incomes, id=income_id)
+    my_company = MyCompanyNames.objects.all()
+
+    if request.method == 'POST':
+        edit_form = IncomesForm(request.POST, instance=income_edit)
+        
+        if edit_form.is_valid():
+          
+          edit_form.save()
+          return redirect('income_details', project_name=income_edit.ProjectName_Incomes)
+    else:
+        edit_form = IncomesForm(instance=income_edit)
+    context = {
+        'edit_form': edit_form,
+        'income_edit': income_edit,
+        'my_company': my_company
+    }
+    return render(request, "income_edit.html", context)
+
 def supplier_edit(request, supplier_name):
     supplier_edit = get_object_or_404(Supplier, CompanyName_Supplier=supplier_name)
+    locations = Locations.objects.all()
    
     if request.method == 'POST':
         edit_form = SupplierForm(request.POST, instance=supplier_edit)
@@ -69,16 +137,19 @@ def supplier_edit(request, supplier_name):
         edit_form = SupplierForm(instance=supplier_edit)
     context = {
         'edit_form': edit_form,
-        'supplier_edit': supplier_edit
+        'supplier_edit': supplier_edit,
+        'locations': locations
+    
     }
     return render(request, "supplier_edit.html", context)
 
 def client_edit(request, client_name):
     client_edit = get_object_or_404(Clients, CompanyName_Clients=client_name)
-   
+    locations = Locations.objects.all()
+
     if request.method == 'POST':
         edit_form = ClientsForm(request.POST, instance=client_edit)
-
+       
         if edit_form.is_valid():
           
           edit_form.save()
@@ -87,12 +158,20 @@ def client_edit(request, client_name):
         edit_form = ClientsForm(instance=client_edit)
     context = {
         'edit_form': edit_form,
-        'client_edit': client_edit
+        'client_edit': client_edit,
+        'locations': locations
     }
     return render(request, "client_edit.html", context)
 
 def project_edit(request, project_name):
     project_edit = get_object_or_404(Project, ProjectName=project_name)
+    my_company = MyCompanyNames.objects.all()
+    client = Clients.objects.all()
+    locations = Locations.objects.all()
+    terrain_roof = Terrain_Roof.objects.all()
+    situations = Situations.objects.all()
+
+
    
     if request.method == 'POST':
         edit_form = ProjectForm(request.POST, instance=project_edit)
@@ -103,7 +182,12 @@ def project_edit(request, project_name):
         edit_form = ProjectForm(instance=project_edit)
     context = {
         'edit_form': edit_form,
-        'project_edit': project_edit
+        'project_edit': project_edit,
+        'my_company':my_company,
+        'client':client,
+        'locations':locations,
+        'terrain_roof':terrain_roof,
+        'situations':situations,
     }
     return render(request, "project_edit.html", context)
 
