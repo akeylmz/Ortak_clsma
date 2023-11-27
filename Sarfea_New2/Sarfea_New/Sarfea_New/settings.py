@@ -131,3 +131,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Alan adı tanımlama
+
+ALLOWED_HOSTS = ['sovotozoglu.com', '3.90.217.139', 'sovotozoglu.net','3.80.27.91']
