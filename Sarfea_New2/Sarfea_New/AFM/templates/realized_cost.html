@@ -231,7 +231,7 @@
                   <tbody id="tbody3">   
                       {% for history in jobhistory %}
                       <tr id="tablotr-is-ac" class="table-row" data-company="{{ history.CompanyName_Job_JobHistory }}">
-                          <td>{{ history.Invoice_No_JobHistory }} </td>
+                          <td><button type="button" class="edit-jobhistory-btn button2" style= "background: none; border:none;"><a href= "{% url 'jobhistory_edit' jobhistory_id=history.id %}"><i id="edit-text" class="fa-solid fa-pen-to-square"></i></a></button>{{ history.Invoice_No_JobHistory }} </td>
                           <td>{{ history.Date_JobHistory|date:"m/d/Y"}} </td>
                           <td title="{{ history.ExpensDetails_JobHistory }}" class="ellipsis">{{ history.ExpensDetails_JobHistory}}</td>
                           <td class="ellipsis">{{ history.Amount_JobHistory }}₺</td>
@@ -266,7 +266,7 @@
                       {% for expense in expenses %}
                       <tr class="table-row" data-company="{{ expense.CompanyName_Paying_Expenses }}"> 
                         
-                        <td>{{ expense.Date_Expenses|date:"m/d/Y" }} </td>
+                        <td><button type="button" class="edit-expenses-btn button2" style= "background: none; border:none;"><a href= "{% url 'expenses_edit' expenses_id=expense.id %}"><i id="edit-text" class="fa-solid fa-pen-to-square"></i></a>{{ expense.Date_Expenses|date:"m/d/Y" }} </td>
                           <td class="ellipsis">{{ expense.ExpensDetails_Expenses }}</td>
                           <td>{{ expense.Bank_Expenses }} </td>
                           <td class="ellipsis"> {{ expense.Amount_Expenses }}₺</td>

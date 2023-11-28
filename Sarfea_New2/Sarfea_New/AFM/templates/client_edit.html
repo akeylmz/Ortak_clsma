@@ -54,10 +54,21 @@
                 <span class="details">E-posta</span>
                 {{ edit_form.Email }}
               </div>    
-              <div class="input-box" name="CompanyName">
-                <span class="details">Bölge</span>
-                {{ edit_form.Location }}
-              </div>          
+              <div class="input-box">
+                <span class="details">Konum</span>
+                <select name="Location" id="id_Location">
+                  {% for x in locations %}
+                    {% if client_edit.Location == x.Location  %}
+                      <option value="{{x.id}}">{{x.Location}}</option>
+                    {% endif %}
+                  {% endfor %}
+                  {% for x in locations %}
+                    {% if client_edit.Location != x.Location  %}
+                      <option value="{{x.id}}">{{x.Location}}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+            </div>              
             </div>
             <div class="button">
                 <input type="submit" value="Kaydet"/>

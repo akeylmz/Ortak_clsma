@@ -2,15 +2,15 @@ from django import forms
 from .models import Project, ProjectNames, Expenses, Incomes, JobHistory ,CompanyNames, MyCompanyNames, Locations, Terrain_Roof, Banks, Clients, Supplier, Details
    
 class ProjectForm(forms.ModelForm):
-    ProjectName = forms.CharField(max_length=63)
+    ProjectName = forms.CharField(max_length=63, label="Proje Adını Giriniz")
     ProjectCode = forms.CharField(max_length=63)
     CompanyName = forms.ModelChoiceField(
         queryset=Clients.objects.all().order_by('CompanyName_Clients'),
-        empty_label=None,
+        empty_label="Firma Adını Seçiniz",
     )  
     CompanyUndertakingWork = forms.ModelChoiceField(
         queryset=MyCompanyNames.objects.all(),
-        empty_label=None,
+        empty_label="İşi Üstlenen Firma Adını Seçiniz",
     )    
     Location = forms.ModelChoiceField(
         queryset=Locations.objects.all(),
@@ -172,7 +172,7 @@ class IncomesForm(forms.ModelForm):
         required=False,
        )
     PaymentType_Incomes = forms.ChoiceField(
-        choices=[('','Seç'), ('Kredi Kartı', 'Kredi Kartı'), ('EFT', 'EFT'), ('Çek', 'Çek')],
+        choices=[('','Ödeme Yöntemi Seçiniz'), ('Kredi Kartı', 'Kredi Kartı'), ('EFT', 'EFT'), ('Çek', 'Çek')],
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False,
     )

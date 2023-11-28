@@ -29,9 +29,10 @@ SECRET_KEY = 'django-insecure-d=)wnw@%shmy#b^@v#pun^w7zukbia2xr3g77w&p%&ndjfpkmd
 DEBUG = True
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = [
-    
-]
+# Sarfea_New/settings.py
+
+ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -134,4 +135,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Alan adı tanımlama
 
-ALLOWED_HOSTS = ['sovotozoglu.com', '3.90.217.139', 'sovotozoglu.net','3.80.27.91']
+

@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
-#http://127.0.0.1:8000/      =>Home Page
-#http://127.0.0.1:8000/home     =>Home Page
+
 
 
 
@@ -20,5 +19,9 @@ urlpatterns = [
     path('project_edit/<str:project_name>/', views.project_edit, name='project_edit'),
     path('client_edit/<str:client_name>/', views.client_edit, name='client_edit'),
     path('supplier_edit/<str:supplier_name>/', views.supplier_edit, name='supplier_edit'),
+    path('expenses_edit/<int:expenses_id>/', views.expenses_edit, name='expenses_edit'),
+    path('jobhistory_edit/<int:jobhistory_id>/', views.jobhistory_edit, name='jobhistory_edit'),
+    path('income_edit/<int:income_id>/', views.income_edit, name='income_edit'),
+
 
 ]
