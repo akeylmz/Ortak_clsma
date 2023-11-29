@@ -202,7 +202,7 @@
                           {{ form.Location }}
                       </div>
                       <div class="input-box">
-                          <span class="details">İş Bedeli - KDV Hariç (₺)</span>
+                          <span class="details">İş Bedeli - KDV Hariç ($)</span>
                           {{ form.Cost_NotIncludingKDV }}
                       </div>
                       <div class="input-box">
@@ -214,7 +214,7 @@
                           {{form.DC_Power}}
                       </div>
                       <div class="input-box">
-                          <span class="details">Hesaplanan Maliyet - KDV Hariç (₺)</span>
+                          <span class="details">Hesaplanan Maliyet - KDV Hariç ($)</span>
                           {{form.CalculatedCost_NotIncludingKDV}}
                       </div>
                     
@@ -336,7 +336,7 @@
 </div>
 </div>
 {% block js_files %} 
-<script src="{% static 'project.js' %}"></script> 
+<script src="{% static 'projectr.js' %}"></script> 
 <script src="{% static 'dist/mc-calendar.min.js' %}"></script> 
 {% endblock %}
 {% endblock %}

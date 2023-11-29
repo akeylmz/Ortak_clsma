@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\SOFTWARE\git\Ortak_clsma\Sarfea_New2\myworld
+set VIRTUAL_ENV=C:\Users\AYusu\Desktop\Ortak_clsma\Sarfea_New2\Sarfea_New\myworld
 
 if not defined PROMPT set PROMPT=$P$G
 

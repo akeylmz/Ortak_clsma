@@ -8,7 +8,7 @@
         <link
             rel='stylesheet'
             href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
-            <link rel="stylesheet" href="{% static 'details_projectsss.css' %}">
+            <link rel="stylesheet" href="{% static 'details_projects.css' %}">
             <link rel="stylesheet" href="{% static 'style.css' %}">
             {% endblock %}
 
@@ -34,48 +34,58 @@
 
             <div class="main">
                 <div class="row">
-                  <div style="background-image: url('{% static 'images/konum.png' %}');" class="column-2 card">
-                    <span>Konum</span></div>
-                    <div style="background-image:url('{% static 'images/arka7.png' %}');" class="column-2 card">
-                        <span>AC Güç</span></div>
-                    <div style="background-image:url('{% static 'images/arka8.png' %}');" class="column-2 card">
-                        <span>DC Güç</span></div>
-                    <div style="background-image:url('{% static 'images/arka9.png' %}');" class="column-2 card">
-                        <span>İş Bedeli</span>
-                        <a style="width: 100%; height: 100%;" href="{% url 'income_details' project_name=project.ProjectName %}">a</a>
-                    </div>
-                    <div style="background-image:url('{% static 'images/arazi-cati.png' %}');" class="column-2 card">
-                        <span>Arazi/Çatı</span></div>
-                </div>
-                <div class="row">
-                    <div style="background-image:url('{% static 'images/arka6.png' %}');" class="column-2 card">
-                        <span>Hesaplanan Maliyet-KDV Hariç</span></div>
-                    <div style="background-image:url('{% static 'images/arka5.png' %}');" class="column-2 card">
-                        <span>Hesaplanan Maliyet Tablo</span></div>
-                    <div style="background-image:url('{% static 'images/arka1.png' %}');" class="column-2 card">
-                        <span>Gerçekleşen Maliyet-KDV Hariç</span></div>
-                    <div
-                        style="background-image:url('{% static 'images/arka4.png' %}');"
-                        id="gerceklesenMaliyet"
-                        class="column-2 card">
-                        <span>Gerçekleşen Maliyet Tablo</span>
-                        <a style="width: 100%; height: 100%;" href="{% url 'realized_cost' project_name=project.ProjectName %}">a</a>
-                    </div>
-                    <div style="background-image:url('{% static 'images/arka2.png' %}');" class="column-2 card">
-                        <span>Teşvikli/Teşviksiz</span></div>
-                </div>
-                <div class="row">
-                    <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
-                        <span>Hesaplanan Kar/Zarar</span></div>
-                    <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
-                        <span>Gerçekleşen Kar/Zarar</span></div>
-                    <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
-                        <span>Hesaplanan Kar Oranı</span></div>
-                    <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
-                        <span>Gerçekleşen Kar Oranı</span></div>
-                    <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
-                        <span>İşin Başlangıç Tarihi</span></div>                    
-                </div>
+                    <div style="background-image: url('{% static 'images/konum.png' %}');" class="column-2 card">
+                      <div class="span">
+                        <span>Konum</span>
+                        {% if project.Location %}
+                        <span>{{project.Location}}</span>
+                        {% endif %}
+
+                    </div></div>
+                      <div style="background-image:url('{% static 'images/arka7.png' %}');" class="column-2 card">
+                          <div class="span"><span>AC Güç</span><span>{{project.AC_Power}}kWe</span></div></div>
+                      <div style="background-image:url('{% static 'images/arka8.png' %}');" class="column-2 card">
+                          <div class="span"><span>DC Güç</span><span>{{project.DC_Power}}kWp</span></div></div>
+                      <div style="background-image:url('{% static 'images/arka9.png' %}');" class="column-2 card">
+                          <div class="span"><span>İş Bedeli</span><span>{{project.Cost_NotIncludingKDV}}₺</span></div>
+                          <a style="width: 100%; height: 100%;" href="{% url 'income_details' project_name=project.ProjectName %}">a</a>
+                      </div>
+                      <div style="background-image:url('{% static 'images/arazi-cati.png' %}');" class="column-2 card">
+                          <div class="span"><span>{{project.Terrain_Roof}}</span></div></div>
+                  </div>
+                  <div class="row">
+                      <div style="background-image:url('{% static 'images/arka6.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/arka5.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/arka1.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div id="gerceklesenMaliyet" style="background-image:url('{% static 'images/arka4.png' %}');"  class="column-2 card">
+                          <div class="span"><span>Gerçekleşen Maliyet</span></div>
+                          <a style="width: 100%; height: 100%;" href="{% url 'realized_cost' project_name=project.ProjectName %}"></a>
+                      </div>
+                      <div style="background-image:url('{% static 'images/arka2.png' %}');" class="column-2 card">
+                          <div class="span">
+                            {% if project.Incentive %}
+                                <span>Teşvikli</span>
+                            {% else %}
+                                <span>Teşviksiz</span>
+                            {% endif %}
+                          </div>
+                      </div>
+                 </div>
+                  <div class="row">
+                      <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
+                          <div class="span"><span></span></div></div>
+                      <div style="background-image:url('{% static 'images/bos.png' %}');" class="column-2 card">
+                          <div class="span"><span>{{project.StartDate|date:"d/m/Y"}}</span><span>{{project.FinishDate|date:"d/m/Y"}}</span></div></div>                    
+                  </div>
             </div>
         </div>
     </div>

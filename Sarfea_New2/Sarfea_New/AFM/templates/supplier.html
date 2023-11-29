@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 {% endblock %}
-    {% block title %} Projects {% endblock %}
+    {% block title %} Supplier {% endblock %}
     {% block content %}
   <div class="body-div">
     <div class="window tedarikciWindow">
@@ -40,6 +40,9 @@
                   <input type="submit" value="Kaydet"/>
               </div>
           </form>
+          {% for error in supplier_form.non_field_errors %}
+           <p style="color: red;">hata{{ error }}</p>
+          {% endfor %}
       </div>
   </div>
 

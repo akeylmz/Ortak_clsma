@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 class FourDecimalField(models.DecimalField):
@@ -13,11 +14,23 @@ class TwoDecimalField(models.DecimalField):
         kwargs['decimal_places'] = 2  # Ondalık basamak sayısı
         super().__init__(*args, **kwargs)
 
+def unique_supplier_validator(value):
+   ''' existing_suppliers = Supplier.objects.filter(CompanyName_Supplier=value)
+    if existing_suppliers.exists():
+        raise ValidationError(f"A Supplier with the name '{value}' already exists.")
+    
+    existing_client = Clients.objects.filter(CompanyName_Clients=value)
+    if existing_client.exists():
+        raise ValidationError(f"A Client with the name '{value}' already exists.")
+    
+    existing_project = Project.objects.filter(ProjectName=value)
+    if existing_project.exists():
+        raise ValidationError(f"A Project with the name '{value}' already exists.")'''
+
 class CompanyNames(models.Model):
     CompanyName = models.CharField(max_length=63) 
     def __str__(self):
         return self.CompanyName
-
 
 class MyCompanyNames(models.Model):
     MyCompanyName = models.CharField(max_length=63) 
@@ -54,17 +67,15 @@ class Details(models.Model):
     def __str__(self):
         return self.Detail
 
-
-
 class Project(models.Model):
-    ProjectName = models.CharField(max_length=63, blank=True, null=True)
+    ProjectName = models.CharField(max_length=63, blank=True, null=True, validators=[unique_supplier_validator])
     ProjectCode = models.CharField(max_length=63, blank=True, null=True)
     CompanyName = models.CharField(max_length=63, blank=True, null=True)
     CompanyUndertakingWork = models.CharField(max_length=63, blank=True, null=True)
     Location = models.CharField(max_length=200, blank=True, null=True)
-    Cost_NotIncludingKDV = models.FloatField( blank=True, null=True)
-    AC_Power = models.IntegerField(blank=True, null=True)
-    DC_Power = models.IntegerField(blank=True, null=True)
+    Cost_NotIncludingKDV = models.FloatField( blank=True, null=True, default=0)
+    AC_Power = models.IntegerField(blank=True, null=True,default=0)
+    DC_Power = models.IntegerField(blank=True, null=True,default=0)
     CalculatedCost_NotIncludingKDV = models.FloatField(blank=True, null=True)
     RealizedCost_NotIncludingKDV = models.FloatField(blank=True, null=True)
     CalculatedProfit_Loss = models.FloatField(blank=True, null=True)
@@ -78,7 +89,6 @@ class Project(models.Model):
     Terrain_Roof = models.CharField(max_length=63, blank=True, null=True)
     Incentive = models.BooleanField(default=False)
     
-
 class Expenses(models.Model):
     ProjectName_Expenses_Copy = models.CharField(max_length=63, blank=True, null=True)
     ProjectName_Expenses = models.CharField(max_length=63, blank=True, null=True)
@@ -124,7 +134,8 @@ class ProjectNames(models.Model):
         return self.ProjectName
     
 class Clients(models.Model):
-    CompanyName_Clients = models.CharField(max_length=63, blank=True, null=True)
+    CompanyName_Clients_New = models.CharField(max_length=63, blank=True, null=True)
+    CompanyName_Clients = models.CharField(max_length=63, blank=True, null=True, validators=[unique_supplier_validator])
     ContactPerson = models.CharField(max_length=63, blank=True, null=True)
     PhoneNumber = models.CharField(max_length=15, blank=True, null=True)
     Email= models.CharField(max_length=63, blank=True, null=True)
@@ -134,7 +145,8 @@ class Clients(models.Model):
         return self.CompanyName_Clients
 
 class Supplier(models.Model):
-    CompanyName_Supplier = models.CharField(max_length=63, blank=True, null=True)
+    CompanyName_Supplier_New = models.CharField(max_length=63, blank=True, null=True)
+    CompanyName_Supplier = models.CharField(max_length=63, blank=True, null=True, validators=[unique_supplier_validator])
     ContactPerson = models.CharField(max_length=63, blank=True, null=True)
     PhoneNumber = models.CharField(max_length=15, blank=True, null=True)
     Email= models.CharField(max_length=63, blank=True, null=True)

@@ -9,7 +9,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"t
     />
-    <link rel="stylesheet" type="text/css" href="{% static 'realized_cost.css' %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static 'realized_costr.css' %}"> 
     {% endblock %}
 
 {% block title %} Realized Cost {% endblock %}
@@ -191,32 +191,33 @@
           <div class="total-table view-2">
              <div id="total-table-head" class="head"><!--<span>Toplam Ödeme =&nbsp;</span><span>₺512.458,25</span><span>&nbsp;/&nbsp;</span><span>$52.239,20</span>-->
             </div>
-            <table class="table table-sortable">
+            <table id="total-cost-table" class="table table-sortable">
                   <thead>
                     <tr>
                       <th>Firma Adı</th>
                       <th>Toplam İş Miktarı (TL)</th>
-                      <th>Toplam İş Miktarı ($)</th>
+                      <th>Toplam İş Miktarı (USD)</th>
                       <th>Toplam Gider (TL)</th>
-                      <th>Toplam Gider ($)</th>
+                      <th>Toplam Gider (USD)</th>
                     </tr>
                   </thead>
                   <tbody id="tbody">
-                    {% for data in result_data %}
-                    {% if data.company_name %}
+                    {% for data in Total_Amount_List %}
+                    {% if data.CompanyName %}
                       <tr>
-                        <td>{{ data.company_name }}</td>
-                        <td>{{ data.total_job_tl }}</td>
-                        <td>{{ data.total_job }}</td>
-                        <td>{{ data.total_expense_tl }}</td>
-                        <td>{{ data.total_expense }}</td>
+                        <td>{{ data.CompanyName }}</td>
+                        <td>{{ data.Job_TL }}</td>
+                        <td>{{ data.Job_USD }}</td>
+                        <td>{{ data.Expenses_TL }}</td>
+                        <td>{{ data.Expenses_USD }}</td>
                       </tr>
                       {% endif %}
                     {% endfor %}
                   </tbody>
-          </table>     
+          </table>  
+
           </div>
-             <div id="c1" class="column view-1">
+            <div id="c1" class="column view-1">
               <div id="head-is-ac" class="head"><span>Yapılan İş</span></div>
             <table id="table" class="table table-sortable">
               <thead>
@@ -243,9 +244,12 @@
                     </tbody>
                 <tfoot>
                   <tr>
-                    <td class="right" colspan="3"></td>
+                    <td></td>
+                    <td></td>
+                    <td class="right">Toplam:</td>
                     <td id="solTableToplamTL" class="right"></td>
-                    <td id="solTableToplamUSD" class="right" colspan="2"></td>
+                    <td></td>
+                    <td id="solTableToplamUSD" class="right"></td>
                   </tr>
                 </tfoot>
               </table>           
@@ -269,30 +273,31 @@
                         <td><button type="button" class="edit-expenses-btn button2" style= "background: none; border:none;"><a href= "{% url 'expenses_edit' expenses_id=expense.id %}"><i id="edit-text" class="fa-solid fa-pen-to-square"></i></a>{{ expense.Date_Expenses|date:"m/d/Y" }} </td>
                           <td class="ellipsis">{{ expense.ExpensDetails_Expenses }}</td>
                           <td>{{ expense.Bank_Expenses }} </td>
-                          <td class="ellipsis"> {{ expense.Amount_Expenses }}₺</td>
-                          <td>{{ expense.Dollar_Rate_Expenses }}₺</td>
-                          <td class="ellipsis">{{ expense.Amount_TL_Expenses }}$</td>
+                          <td class="ellipsis"> {{ expense.Amount_Expenses }}</td>
+                          <td>{{ expense.Dollar_Rate_Expenses }}</td>
+                          <td class="ellipsis">{{ expense.Amount_TL_Expenses }}</td>
                           <td style="display: none;">{{ expense.CompanyName_Paying_Expenses }}</td>
                       </tr>
                       {% endfor %}
                     </tbody>
                 <tfoot>
                   <tr>
-                    <td class="right" colspan="3"></td>
-                    <td id="sagTableToplamTL" class="right">0</td>
-                    <td id="sagTableToplamUSD" class="right" colspan="2">0</td>
+                    <td></td>
+                    <td></td>                   
+                    <td class="right" >Toplam:</td>
+                    <td id="sagTableToplamTL" class="right">0.00₺</td>
+                    <td></td>
+                    <td id="sagTableToplamUSD" class="right">0.00$</td>
                   </tr>
                 </tfoot>
             </table>
-          </div>  
-          
-          
+          </div>            
 
         </div>        
         <div id="genel-toplam">
           <span class="view-1">Genel Toplam</span>
-          <label id="genelToplamTL" class="view-1" for="">₺0</label>
-          <label id="genelToplamUSD" class="view-1" for="">$0</label>
+          <label id="genelToplamTL" class="view-1" for="">0.00₺</label>
+          <label id="genelToplamUSD" class="view-1" for="">0.00$</label>
         </div>            
       </div>   
 
@@ -301,7 +306,7 @@
 
   {% block js_files %}
 
-  <script src="{% static 'realized_costr.js' %}"></script> 
+  <script src="{% static 'realized_costt.js' %}"></script> 
   <script>
  document.addEventListener("DOMContentLoaded", function() {
     // İlk li elemanını seç
@@ -312,8 +317,6 @@
         firstLiElement.click();
     }
 });
-
-
 
 document.addEventListener("DOMContentLoaded", function() {
     // Tüm li elemanlarını seç
@@ -337,12 +340,6 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     });
   });
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     // Get all company links
     var companyLinks = document.querySelectorAll(".company-link");
@@ -363,14 +360,47 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedRows.forEach(function (row) {
                 row.style.display = "";
 
-                // Format numeric values in the row
-                var numericCells = row.querySelectorAll('td:nth-child(4), td:nth-child(6)');
+                // Format numeric values TL
+                var numericCells = row.querySelectorAll('td:nth-child(4)');
                 numericCells.forEach(function (cell) {
                     var numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
-                    cell.textContent = formatNumber(numericValue);
+                    console.log(numericValue);
+                    if(numericValue.toString() != "NaN"){
+                      cell.textContent =  formatNumber(numericValue)+' '+'₺' ;
+                    }
+                    else{
+                      cell.textContent = '0₺';
+                    }
+                });
+                // Format numeric values USD
+                numericCells = row.querySelectorAll('td:nth-child(6)');
+                numericCells.forEach(function (cell) {
+                    numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
+                    
+                    if(numericValue.toString() != "NaN"){
+                      cell.textContent =  formatNumber(numericValue)+' $';
+                    }else{
+                      cell.textContent = '0$';
+                    }
+                });
+                // Format numeric values KuR
+                numericCells = row.querySelectorAll('td:nth-child(5)');
+                numericCells.forEach(function (cell) {
+                    numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
+                    
+                    if(numericValue.toString() != "NaN"){
+                      cell.textContent =  formatNumber(numericValue) + ' ₺';
+                    }else{
+                      cell.textContent = '0₺';
+                    }
                 });
             });
-        });
+        
+        
+        
+        
+        
+          });
     });
 
     function formatNumber(number) {
@@ -378,6 +408,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+
+
+
+//--------------
+document.addEventListener("DOMContentLoaded", function () {
+    // Tablodaki tüm satırları seç
+    var rows = document.querySelectorAll("#total-cost-table tbody tr");
+
+    rows.forEach(function (row) {
+      // 2., 3., 4., ve 5. sütunları al, temizle ve sayıya çevir
+      var jobTLCell = row.querySelector('td:nth-child(2)');
+      var jobUSDCell = row.querySelector('td:nth-child(3)');
+      var expensesTLCell = row.querySelector('td:nth-child(4)');
+      var expensesUSDCell = row.querySelector('td:nth-child(5)');
+
+      var jobTLValue = parseFloat(removeSymbols(jobTLCell.textContent));
+      var jobUSDValue = parseFloat(removeSymbols(jobUSDCell.textContent));
+      var expensesTLValue = parseFloat(removeSymbols(expensesTLCell.textContent));
+      var expensesUSDValue = parseFloat(removeSymbols(expensesUSDCell.textContent));
+
+      // NaN veya None kontrolü ekleyerek sıfır ata
+      jobTLValue = isNaN(jobTLValue) || jobTLValue === null ? 0 : jobTLValue;
+      jobUSDValue = isNaN(jobUSDValue) || jobUSDValue === null ? 0 : jobUSDValue;
+      expensesTLValue = isNaN(expensesTLValue) || expensesTLValue === null ? 0 : expensesTLValue;
+      expensesUSDValue = isNaN(expensesUSDValue) || expensesUSDValue === null ? 0 : expensesUSDValue;
+
+      // Temizlenmiş değerleri para birimi şeklinde formatla
+      var formattedJobTL = formatCurrency(jobTLValue, '₺');
+      var formattedJobUSD = formatCurrency(jobUSDValue, '$');
+      var formattedExpensesTL = formatCurrency(expensesTLValue, '₺');
+      var formattedExpensesUSD = formatCurrency(expensesUSDValue, '$');
+
+      // Sonuçları hücrelere yaz
+      jobTLCell.textContent = formattedJobTL;
+      jobUSDCell.textContent = formattedJobUSD;
+      expensesTLCell.textContent = formattedExpensesTL;
+      expensesUSDCell.textContent = formattedExpensesUSD;
+    });
+  });
+
+  // Sembol ve boşlukları temizleyen yardımcı fonksiyon
+  function removeSymbols(value) {
+    return value.replace(/[^0-9\.]/g, '');
+  }
+
+  // Sayıyı para birimi şeklinde formatlayan yardımcı fonksiyon
+  function formatCurrency(value, currencySymbol) {
+    return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ' + currencySymbol;
+  }
 
 </script>
 

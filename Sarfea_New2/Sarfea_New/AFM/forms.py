@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, ProjectNames, Expenses, Incomes, JobHistory ,CompanyNames, MyCompanyNames, Locations, Terrain_Roof, Banks, Clients, Supplier, Details
+from .models import Project, ProjectNames, Expenses, Incomes, JobHistory ,CompanyNames, MyCompanyNames, Locations, Terrain_Roof, Banks, Clients, Supplier, Details, Situations
    
 class ProjectForm(forms.ModelForm):
     ProjectName = forms.CharField(max_length=63, label="Proje Adını Giriniz")
@@ -14,7 +14,7 @@ class ProjectForm(forms.ModelForm):
     )    
     Location = forms.ModelChoiceField(
         queryset=Locations.objects.all(),
-        empty_label= None,
+        empty_label= 'Konum Seçiniz',
         required=False,
     )    
     Cost_NotIncludingKDV = forms.FloatField(required=False)        
@@ -34,10 +34,14 @@ class ProjectForm(forms.ModelForm):
     Terrain_Roof = forms.ModelChoiceField(
         queryset=Terrain_Roof.objects.all(),
         required=False,
-        empty_label= None,
+        empty_label= 'Seçiniz',
     )    
     KDV_Rate = forms.FloatField(required=False, initial=20.0)
-    #Situation = forms.CharField(max_length=63, initial="Onay Bekliyor")
+    Situation = forms.ModelChoiceField(
+        queryset=Situations.objects.all(),
+        required=False,
+        empty_label= 'Seçiniz',
+    )    
     StartDate = forms.DateField(
         label='Tarih Seçiniz', 
         widget=forms.widgets.DateInput(attrs={'type': 'date'}),
@@ -54,12 +58,11 @@ class ProjectForm(forms.ModelForm):
         fields = ['CompanyName', 'Location', 'AC_Power', 'DC_Power', 'CompanyUndertakingWork',
                 'CalculatedCost_NotIncludingKDV', 'RealizedCost_NotIncludingKDV','CalculatedProfit_Loss', 
                 'RealizedProfit_Loss', 'CalculatedProfitRate', 'RealizedProfitRate', 'Cost_NotIncludingKDV', 
-                'KDV_Rate', 'Terrain_Roof', 'Incentive',
+                'KDV_Rate', 'Terrain_Roof', 'Incentive','Situation',
                   'StartDate', 'FinishDate','ProjectName','ProjectCode']
         
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
-
 
 class ExpensesForm(forms.ModelForm):
     ProjectName_Expenses_Copy = forms.CharField(max_length=63, required=False)
@@ -108,9 +111,7 @@ class ExpensesForm(forms.ModelForm):
         model = Expenses
         fields = ['CompanyName_Expenses', 'CompanyName_FromPaymentMade_Expenses', 'CompanyName_Paying_Expenses',
                   'ExpensDetails_Expenses', 'Amount_Expenses', 'Dollar_Rate_Expenses', 'Bank_Expenses',
-                  'Date_Expenses', 'ProjectName_Expenses', 'ProjectName_Expenses_Copy']
-
-    
+                  'Date_Expenses', 'ProjectName_Expenses', 'ProjectName_Expenses_Copy']   
 
 class JobHistoryForm(forms.ModelForm):
     ProjectName_JobHistory_Copy = forms.CharField(max_length=63, required=False)
@@ -191,8 +192,8 @@ class IncomesForm(forms.ModelForm):
                    'Amount_Incomes','PaymentType_Incomes','ChekDate_Incomes', "LastChekDate_Incomes"
                   ]
 
-
 class ClientsForm(forms.ModelForm):
+    CompanyName_Clients_New = forms.CharField(max_length=63, required=False)
     CompanyName_Clients = forms.CharField(max_length=63)
     ContactPerson = forms.CharField(max_length=63, required=False)
     PhoneNumber = forms.CharField(max_length=11, required=False)
@@ -207,6 +208,7 @@ class ClientsForm(forms.ModelForm):
         fields = '__all__'
 
 class SupplierForm(forms.ModelForm):
+    CompanyName_Supplier_New = forms.CharField(max_length=63, required=False)
     CompanyName_Supplier = forms.CharField(max_length=63)
     ContactPerson = forms.CharField(max_length=63, required=False)
     PhoneNumber = forms.CharField(max_length=11, required=False)

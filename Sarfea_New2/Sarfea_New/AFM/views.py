@@ -4,55 +4,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProjectForm, ExpensesForm, IncomesForm, JobHistoryForm, ClientsForm, SupplierForm
 from .models import Project, Expenses, Incomes, PaymentFirms, CompanyNames, JobHistory, ProjectNames, MyCompanyNames, PaymentFirms, Clients ,Details, Supplier, Locations,Terrain_Roof, Situations, Banks
 from django.db.models import Q
-from django import template
-
-register = template.Library()
-
-@register.simple_tag
-def update_widget_attrs(field, attrs):
-    field.widget.attrs.update(attrs)
-    return field
-
-'''def get_realized_cost_data(project_name, payment_firms_names):
-    # JobHistory ve Expenses tablolarını birleştirip firma adına göre gruplayın
-    data = (
-        JobHistory.objects.filter(
-            Q(ProjectName_JobHistory=project_name) & Q(ProjectName_Job_JobHistory__in=payment_firms_names)
-        )
-        .values('ProjectName_Job_JobHistory')
-        .annotate(
-            total_job_tl=Sum('Amount_TL_JobHistory'),
-            total_job=Sum('Amount_JobHistory'),
-            total_expense_tl=Value(0, output_field=IntegerField()),
-            total_expense=Value(0, output_field=IntegerField()),
-        )
-        .union(
-            Expenses.objects.filter(
-                Q(ProjectName_Expenses=project_name) & Q(ProjectName_Paying_Expenses__in=payment_firms_names)
-            )
-            .values('CompanyName_Paying_Expenses')
-            .annotate(
-                total_expense_tl=Sum('Amount_TL_Expenses'),
-                total_expense=Sum('Amount_Expenses'),
-                total_job_tl=Value(0, output_field=IntegerField()),
-                total_job=Value(0, output_field=IntegerField()),
-            )
-        )
-        .order_by('CompanyName_Job_JobHistory')
-    )
-
-    result_data = []
-    for entry in data:
-        result_data.append({
-            'company_name': entry.get('CompanyName_Job_JobHistory') or entry.get('CompanyName_Paying_Expenses'),
-            'total_job_tl': entry.get('total_job_tl', 0),
-            'total_job': entry.get('total_job', 0),
-            'total_expense_tl': entry.get('total_expense_tl', 0),
-            'total_expense': entry.get('total_expense', 0),
-        })
-
-    return result_data'''
-
 
 # Create your views here.
 def expenses_edit(request, expenses_id):
@@ -191,22 +142,6 @@ def project_edit(request, project_name):
     }
     return render(request, "project_edit.html", context)
 
-def index(request):
-    if request.method == 'POST':
-        index_form = JobHistoryForm(request.POST)
-        if index_form.is_valid():
-            index_form.save()
-            return redirect('index')
-    else:
-        index_form = JobHistoryForm()
-
-    context = {
-        'index_form': index_form,
-    
-    }
-
-    return render(request, 'index.html', context)
-
 def home(request):
     return render(request, "home.html")
 
@@ -277,6 +212,32 @@ def realized_cost(request, project_name):
     # Prepare the list of distinct company names
     distinct_company_names = [company['PaymentFirmsName'] for company in filtered_payment_firms]
 
+    '''*******************-TOTAL_AMOUNT-******************'''
+    Total_Amount_List = []
+
+    for dcn in distinct_company_names:
+        total_amount = {
+            "CompanyName": dcn,
+            "Expenses_TL": 0,
+            "Expenses_USD": 0,
+            "Job_TL": 0,
+            "Job_USD": 0
+        }
+
+        for exp in expenses:
+            if exp.CompanyName_Paying_Expenses == dcn and exp.Amount_Expenses is not None and exp.Amount_TL_Expenses is not None:
+                total_amount["Expenses_TL"] += exp.Amount_Expenses
+                total_amount["Expenses_USD"] += exp.Amount_TL_Expenses
+
+        for job in jobhistory:
+            if job.CompanyName_Job_JobHistory == dcn and job.Amount_JobHistory is not None and job.Amount_TL_JobHistory is not None:
+                total_amount["Job_TL"] += job.Amount_JobHistory
+                total_amount["Job_USD"] += job.Amount_TL_JobHistory
+
+        if any(value != 0 for value in total_amount.values()):
+            Total_Amount_List.append(total_amount)
+
+
     if request.method == 'POST':
         expenses_form = ExpensesForm(request.POST)
         jobhistory_form = JobHistoryForm(request.POST)
@@ -309,7 +270,7 @@ def realized_cost(request, project_name):
         "jobhistory_form": jobhistory_form,
         "supplier_form": supplier_form,
         "distinct_company_names": distinct_company_names,
-        #"result_data": result_data,
+        "Total_Amount_List":Total_Amount_List
     }
     return render(request, "realized_cost.html", context)
 
@@ -347,6 +308,15 @@ def projects(request):
     ).order_by('custom_order_situation', 'custom_order_date')
 
     
+    expenses_form=None
+    incomes_form=None
+    client_form=None
+    jobhistory_form=None
+    client_form=None
+    supplier_form=None
+    form=None
+
+
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
         

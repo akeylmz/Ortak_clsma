@@ -7,7 +7,7 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
     <link rel="stylesheet" href="{% static 'projects_style.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'details_projectsss.css' %}">
+    <link rel="stylesheet" href="{% static 'details_projects.css' %}">
     <link rel="stylesheet" href="{% static 'center.css' %}">
 
     {% endblock %}
@@ -42,6 +42,10 @@
                   <span class="details">Firma Adı</span>
                   {{ edit_form.CompanyName_Supplier }}
                 </div>    
+                <div class="input-box" name="CompanyName">
+                  <span class="details">Firma Adı</span>
+                  <input id="id_CompanyName_Supplier_New"  name="CompanyName_Supplier_New" value="{{edit_form.CompanyName_Supplier.value}}" />
+                </div>  
                 <div class="input-box" name="CompanyName">
                   <span class="details">Muhatap</span>
                   {{ edit_form.ContactPerson }}

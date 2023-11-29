@@ -93,6 +93,11 @@ table {
   border-bottom: 3px solid #18283b;
   padding-right: 10px;
 }
+
+#edit-text{
+  margin-right: 20px;
+  font-size: 20px;
+}
 /*  Tablolar   */
 
 .column a {
@@ -119,7 +124,7 @@ tbody {
   line-height: 45px;
 }
 td:first-child {
-  padding-left: 50px;
+  padding-left: 20px;
 }
 tbody tr:nth-child(even) {
   background-color: #e6e6fa;
@@ -174,8 +179,7 @@ tbody tr:nth-child(even) {
   text-align: center;
 }
 .right {
-  text-align: right;
-  padding-right: 10px;
+  text-align: center;
   font-weight: 500;
   font-size: 16px;
 }

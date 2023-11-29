@@ -108,7 +108,7 @@
             
           </div>
           <div class="right-menu">            
-            <div class="column view-1"><div id="gider-acc" class="head"><span>İş Bedeli -</span>&nbsp;<span>USD</span>&nbsp;<span>/</span>&nbsp; <span>Tl</span></div>
+            <div class="column view-1"><div id="gider-acc" class="head"><span>İş Bedeli - {{project.CalculatedCost_NotIncludingKDV}} $</div>
             <table id="table" class="table table-sortable">
               <thead>
                 <th>Proje Adı</th>
@@ -125,16 +125,19 @@
                     <td>{{ income.CompanyName_ReceivePayment_Incomes }}</td>
                     <td>{{ income.PaymentType_Incomes }} </td>
                     <td class="amount-column">{{ income.Amount_Incomes }} ₺</td>
-                    <td>{{ income.Dollar_Rate_Incomes }}₺</td>
+                    <td class="amount-kur">{{ income.Dollar_Rate_Incomes }}₺</td>
                     <td class="amount-column2">{{ income.Amount_Usd_Incomes }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
               <tfoot>
                 <tr>
-                  <td class="right" colspan="3">Toplam:</td>
-                  <td class="right" id="total-amount-TL" colspan="2">₺0,00</td>
-                  <td class="right" id="total-amount-USD" colspan="2">$0.00</td>
+                  <td></td>
+                  <td></td>
+                  <td class="right">Toplam:</td>
+                  <td class="right" id="total-amount-TL">0.00₺</td>
+                  <td></td>
+                  <td class="right" id="total-amount-USD">0.00$</td>
                 </tr>
               </tfoot>
           </table>     
@@ -146,6 +149,6 @@
         </div>        
       </div>
 {% block js_files %} 
-<script src="{% static 'income_detailss.js' %}"></script> 
+<script src="{% static 'income_details.js' %}"></script> 
 {% endblock %}
 {% endblock %}

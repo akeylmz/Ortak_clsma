@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Project, CompanyNames, PaymentFirms, ProjectNames, Expenses, JobHistory, Incomes, Clients
+from .models import Project, CompanyNames, PaymentFirms, ProjectNames, Expenses, JobHistory, Incomes, Supplier, Clients
 from django.db import models
 
 @receiver(pre_save, sender=Project)
@@ -122,11 +122,47 @@ def update_Incomes_Tl(sender, instance, **kwargs):
         # Update the instance with the new value
         instance.Amount_Usd_Incomes = amount_usd_Incomes
 
-'''@receiver(pre_save, sender=Clients)
-def update_related_models(sender, instance, **kwargs):
-    company_name = instance.CompanyName
+@receiver(post_save, sender=Clients)
+def update_projects_with_client_name(sender, instance, **kwargs):
+    
+    # Eğer CompanyName_Clients değiştiyse
+    if instance.CompanyName_Clients != instance.CompanyName_Clients_New and instance.CompanyName_Clients_New:
+        # Yeni CompanyName ile eşleşen Project'leri bul
+        matching_projects = Project.objects.filter(CompanyName=instance.CompanyName_Clients)
 
-    # PaymentFirms kontrolü
-    payment_firms = PaymentFirms.objects.filter(PaymentFirmsName=company_name)
-    if not payment_firms.exists():
-        PaymentFirms.objects.create(PaymentFirmsName=company_name)'''
+        # Bulunan Project'leri CompanyName_Clients_New ile güncelle
+        for project in matching_projects:
+            project.CompanyName = instance.CompanyName_Clients_New
+            project.save()
+
+        # CompanyName_Clients_New boşsa CompanyName_Clients ile doldur
+        if not instance.CompanyName_Clients_New:
+            instance.CompanyName_Clients_New = instance.CompanyName_Clients
+
+        # Son olarak CompanyName_Clients'ı CompanyName_Clients_New ile güncelle
+        instance.CompanyName_Clients = instance.CompanyName_Clients_New
+        instance.save()
+
+@receiver(post_save, sender=Supplier)
+def update_expenses_with_supplier_name(sender, instance, **kwargs):
+    
+    # Eğer CompanyName_Clients değiştiyse
+    if instance.CompanyName_Supplier != instance.CompanyName_Supplier_New and instance.CompanyName_Supplier_New:
+        # Yeni CompanyName ile eşleşen Project'leri bul
+        matching_expenses = Expenses.objects.filter(CompanyName_Paying_Expenses=instance.CompanyName_Supplier)
+        matching_jobhistory = JobHistory.objects.filter(CompanyName_Job_JobHistory=instance.CompanyName_Supplier)
+
+
+        # Bulunan Project'leri CompanyName_Clients_New ile güncelle
+        for expenses in matching_expenses:
+            expenses.CompanyName_Paying_Expenses = instance.CompanyName_Supplier_New
+            expenses.save()
+        # Bulunan Project'leri CompanyName_Clients_New ile güncelle
+        for jobhistory in matching_jobhistory:
+            jobhistory.CompanyName_Job_JobHistory = instance.CompanyName_Supplier_New
+            jobhistory.save()
+
+    
+        # Son olarak CompanyName_Clients'ı CompanyName_Clients_New ile güncelle
+        instance.CompanyName_Supplier = instance.CompanyName_Supplier_New
+        instance.save()
