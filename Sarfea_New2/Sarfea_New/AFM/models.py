@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class FourDecimalField(models.DecimalField):
     def __init__(self, *args, **kwargs):
-        kwargs['max_digits'] = 8 # Toplam basamak sayısı (ondalık dahil)
+        kwargs['max_digits'] = 17 # Toplam basamak sayısı (ondalık dahil)
         kwargs['decimal_places'] = 4  # Ondalık basamak sayısı
         super().__init__(*args, **kwargs)
 
@@ -97,8 +97,8 @@ class Expenses(models.Model):
     CompanyName_FromPaymentMade_Expenses = models.CharField(max_length=63, blank=True, null=True)
     CompanyName_Paying_Expenses = models.CharField(max_length=63, default="Genel Gider",blank=True, null=True)
     ExpensDetails_Expenses = models.CharField(max_length=1000, blank=True, null=True)
-    Amount_Expenses = TwoDecimalField(blank=True, null=True)
-    Amount_TL_Expenses = TwoDecimalField(blank=True, null=True)
+    Amount_Expenses = FourDecimalField(blank=True, null=True)
+    Amount_TL_Expenses = FourDecimalField(blank=True, null=True)
     Dollar_Rate_Expenses = FourDecimalField(blank=True, null=True)
     Bank_Expenses = models.CharField(max_length=63, blank=True, null=True)
     Date_Expenses = models.DateField(blank=True, null=True)
@@ -111,8 +111,8 @@ class JobHistory(models.Model):
     CompanyName_Job_JobHistory = models.CharField(max_length=63, blank=True, null=True)
     ExpensDetails_JobHistory = models.CharField(max_length=1000, blank=True, null=True)
     Invoice_No_JobHistory = models.CharField(max_length=63, blank=True, null=True) 
-    Amount_JobHistory = TwoDecimalField(blank=True, null=True)
-    Amount_TL_JobHistory = TwoDecimalField(blank=True, null=True)
+    Amount_JobHistory = FourDecimalField(blank=True, null=True)
+    Amount_TL_JobHistory = FourDecimalField(blank=True, null=True)
     Dollar_Rate_JobHistory = FourDecimalField(blank=True, null=True)
     Date_JobHistory = models.DateField(blank=True, null=True)
 
@@ -120,12 +120,12 @@ class Incomes(models.Model):
     ProjectName_Incomes_Copy = models.CharField(max_length=63, blank=True, null=True)
     ProjectName_Incomes = models.CharField(max_length=63, blank=True, null=True)
     CompanyName_ReceivePayment_Incomes = models.CharField(max_length=63, blank=True, null=True)
-    Amount_Incomes = TwoDecimalField(blank=True, null=True)
+    Amount_Incomes = FourDecimalField(blank=True, null=True)
     Dollar_Rate_Incomes = FourDecimalField(blank=True, null=True)
     PaymentType_Incomes = models.CharField(max_length=63, blank=True, null=True)     
     ChekDate_Incomes = models.DateField(blank=True, null=True)
     LastChekDate_Incomes = models.DateField(blank=True, null=True)
-    Amount_Usd_Incomes = TwoDecimalField(blank=True, null=True)
+    Amount_Usd_Incomes = FourDecimalField(blank=True, null=True)
 
 class ProjectNames(models.Model):
     ProjectName = models.CharField(max_length=63) 

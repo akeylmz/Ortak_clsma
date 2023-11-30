@@ -36,7 +36,7 @@ document.querySelector(".chek-last-date-box").style.display = "block";
 document.addEventListener("DOMContentLoaded", function () {
   
   var numericCells = document.querySelectorAll('.table-row td:nth-child(4), .table-row td:nth-child(6)');  
-  console.log(numericCells);
+  
   numericCells.forEach(function (cell) {
     var numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
     cell.textContent = formatNumber(numericValue);
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function formatNumber(number) {
-return new Intl.NumberFormat('en-US').format(number.toFixed(2));
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(number.toFixed(4));
 
 }
 
@@ -66,11 +66,10 @@ setTimeout(function() {fetchDataFromTable();}, 0);
   function fetchDataFromTable() {
       // tabloyu topla ve sonuçları ekrana yaz
    tableResult = tableTopla(table);
-   console.log(formatNumber(tableResult.totalTLFunction));
+  
    genaralTotalTL.textContent = formatNumber(tableResult.totalTLFunction)+" ₺" ; 
    generalTotalUSD.textContent =  formatNumber(tableResult.totalUSDFunction)+" $" ; 
-   console.log( formatNumber(tableResult.totalTLFunction)+" ₺" );
-   console.log( formatNumber(tableResult.totalUSDFunction)+" $"  );
+   
   }    
 }
 
@@ -87,17 +86,15 @@ dataRows.forEach(row => {
   const cells = row.querySelectorAll("td"); 
   if (window.getComputedStyle(row).getPropertyValue('display') !== 'none') {
       const cells = row.querySelectorAll("td");    
-      console.log(cells[columnIndex2].textContent);
-      console.log(cells[columnIndex1].textContent);
+     
       
         totalUSDFunction += birimSil(cells[columnIndex2].textContent);         
         totalTLFunction += birimSil(cells[columnIndex1].textContent);    
   }
 });
-totalUSDFunction = parseFloat(totalUSDFunction.toFixed(2))
-totalTLFunction = parseFloat(totalTLFunction.toFixed(2))
-console.log("tl" + totalUSDFunction);
-console.log("usd" + totalTLFunction);
+totalUSDFunction = parseFloat(totalUSDFunction.toFixed(4))
+totalTLFunction = parseFloat(totalTLFunction.toFixed(4))
+
 return { totalTLFunction, totalUSDFunction };
 }
 /* Gelen verinin birimini silip int veren fonksiyon */
@@ -111,7 +108,7 @@ function birimSil(inputString) {
   } else {
     number = 0;
   }
-  //console.log("number =" + number);
+  
   return number;
 }
 

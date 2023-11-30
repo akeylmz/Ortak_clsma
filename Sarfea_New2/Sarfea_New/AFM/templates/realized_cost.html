@@ -20,7 +20,7 @@
     <div class="container">
         <h3 id="is-modal" class="modal-kapat">X</h3>
         <div class="title">Yapılan İş</div>
-        <form action="{% url 'realized_cost' project_name=project.ProjectName %}" method="post">
+        <form id="my-form1" action="{% url 'realized_cost' project_name=project.ProjectName %}" method="post">
           {% csrf_token %}
           <div class="user-details">
 
@@ -42,7 +42,8 @@
              </div>
              <div class="input-box">
                 <span class="details">Tutar (₺)</span>
-                {{ jobhistory_form.Amount_JobHistory }}
+                <input class="coc-input" type="text" name="Amount_JobHistory" id="id_Amount_JobHistory" step="0.0001">
+
              </div>
              <div class="input-box">
                 <span class="details">Dolar Kuru (₺)</span>
@@ -54,18 +55,18 @@
              </div>
              <div class="input-box">
                 <span class="details">Tarih</span>
-                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" id="tarih4" type="date" name="Date_JobHistory" placeholder="Tarih Seçiniz" />
+                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" id="tarih4" type="date" name="Date_JobHistory" min='2000-01-01' max='2099-01-01' />
              </div>
              <div class="input-box">
               <span class="details">Kur Saati</span>
               <select name="" id="">
-                 <option value="">3'ten Önce</option>
-                 <option value="">3'ten Sonra</option>
+                 <option value="">15:30'dan Önce</option>
+                 <option value="">15:30'dan Sonra</option>
               </select>
            </div>
           </div>
           <div class="button">
-             <input type="submit" value="Kaydet" />
+             <input id="project-create-btn1" type="submit" value="Kaydet" />
           </div>
        </form>
     </div>
@@ -74,7 +75,7 @@
     <div class="container">
         <h3 id="gider-modal" class="modal-kapat">X</h3>
         <div class="title">Yapılan Ödeme</div>
-        <form action="{% url 'realized_cost' project_name=project.ProjectName %}" method="post" enctype="multipart/form-data">
+        <form id="my-form2" action="{% url 'realized_cost' project_name=project.ProjectName %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="user-details">
 
@@ -96,7 +97,7 @@
              </div>
              <div class="input-box">
                 <span class="details">Tutar (₺)</span>
-                {{ expenses_form.Amount_Expenses }}
+                <input class="coc-input" type="text" name="Amount_Expenses" id="id_Amount_Expenses" step="0.0001">
              </div>
              <div class="input-box">
                 <span class="details">Dolar Kuru (₺)</span>
@@ -108,18 +109,18 @@
              </div>
             <div class="input-box">
                 <span class="details">Tarih</span>
-                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" id="tarih5" type="date" name="Date_Expenses" placeholder="Tarih Seçiniz" />
+                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" id="tarih5" type="date" name="Date_Expenses" min='2000-01-01' max='2099-01-01' />
              </div>
              <div class="input-box">
               <span class="details">Kur Saati</span>
               <select name="" id="">
-                 <option value="">3'ten Önce</option>
-                 <option value="">3'ten Sonra</option>
+                 <option value="">15:30'dan Önce</option>
+                 <option value="">15:30'dan Sonra</option>
               </select>
            </div>
           </div>
           <div class="button">
-             <input type="submit" value="Kaydet" />
+             <input id="project-create-btn2" type="submit" value="Kaydet" />
           </div>
        </form>
     </div>
@@ -214,6 +215,15 @@
                       {% endif %}
                     {% endfor %}
                   </tbody>
+                  <tfoot>
+                  <tr>                    
+                    <td class="right">Toplam:</td>
+                    <td id="solTotalTableToplamTL" class="right">0</td>
+                    <td id="solTotalTableToplamUSD" class="right">0</td>
+                    <td id="sagTotalTableToplamTL" class="right">0</td>
+                    <td id="sagTotalTableToplamUSD" class="right">0</td>
+                  </tr>
+                </tfoot>
           </table>  
 
           </div>
@@ -306,7 +316,7 @@
 
   {% block js_files %}
 
-  <script src="{% static 'realized_costt.js' %}"></script> 
+  <script src="{% static 'realized_cost.js' %}"></script> 
   <script>
  document.addEventListener("DOMContentLoaded", function() {
     // İlk li elemanını seç
@@ -363,8 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Format numeric values TL
                 var numericCells = row.querySelectorAll('td:nth-child(4)');
                 numericCells.forEach(function (cell) {
-                    var numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
-                    console.log(numericValue);
+                    var numericValue = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));                    
                     if(numericValue.toString() != "NaN"){
                       cell.textContent =  formatNumber(numericValue)+' '+'₺' ;
                     }
@@ -404,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function formatNumber(number) {
-        return new Intl.NumberFormat('en-US').format(number.toFixed(2));
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(number.toFixed(4));
     }
 });
 
@@ -456,8 +465,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Sayıyı para birimi şeklinde formatlayan yardımcı fonksiyon
   function formatCurrency(value, currencySymbol) {
-    return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ' + currencySymbol;
+    return value.toFixed(4).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ' + currencySymbol;
   }
+
+
+
+
+  var amountInputForFormat1 = document.querySelector("#id_Amount_JobHistory");
+    var amountInputForFormat2 = document.querySelector("#id_Amount_Expenses");
+    var amountInputReformatBtn1 = document.querySelector("#project-create-btn1");
+    var amountInputReformatBtn2 = document.querySelector("#project-create-btn2");
+    var form1 = document.querySelector("#my-form1");
+    var form2 = document.querySelector("#my-form2");
+    var deger;
+    
+    amountInputReformatBtn1.addEventListener("click", function(event) {
+    event.preventDefault();
+    amountInputForFormat1.value = clear(deger);
+    form1.submit();
+    });
+    amountInputReformatBtn2.addEventListener("click", function(event) {
+    event.preventDefault();
+    amountInputForFormat2.value = clear(deger);
+    form2.submit();
+    });
+        
+    runEventListeners(amountInputForFormat1);
+    runEventListeners(amountInputForFormat2);
+    function runEventListeners(x){
+    x.addEventListener("input", function(event) {
+        var inputValue = event.target.value;
+        var clearValue = clear(inputValue);
+        var formatValue = format(clearValue);
+        x.value = formatValue;
+        deger = formatValue;
+    });
+    }
+    function clear(value){   // Alfasayısal olmayan ve nokta olmayan karakterleri kaldır   
+    var cleanString = value.replace(/[^0-9.]/g, '');
+    return cleanString;    // Çıktı: "123456.789"     
+    }
+    
+    function format(number) {
+    var indexOfDot = number.indexOf('.');
+    
+    if (indexOfDot !== -1) {
+    var integerPart = number.slice(0, indexOfDot).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var decimalPart = number.slice(indexOfDot + 1);
+    return integerPart + '.' + decimalPart;
+    } else {
+    var formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return formattedNumber; 
+    }
+    }
 
 </script>
 

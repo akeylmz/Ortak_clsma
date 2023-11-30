@@ -34,7 +34,7 @@
 <div class="center">
     <div class="container projeBaslatContainer">
       <div class="title">Proje Güncelleme</div>
-      <form action="{% url 'project_edit' project_name=project_edit.ProjectName %}" method="post">
+      <form id="my-form" action="{% url 'project_edit' project_name=project_edit.ProjectName %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="form_type" value="edit_form">
         <div class="user-details">
@@ -92,8 +92,9 @@
                 </select>
             </div>
               <div class="input-box">
-                  <span class="details">İş Bedeli - KDV Hariç (₺)</span>
-                  {{ edit_form.Cost_NotIncludingKDV }}
+                  <span class="details">İş Bedeli - KDV Hariç ($)</span>
+                  <input class="coc-input" type="text" name="Cost_NotIncludingKDV" id="id_Cost_NotIncludingKDV" step="0.0001" value="{{project_edit.Cost_NotIncludingKDV}}">
+
               </div>
               <div class="input-box">
                   <span class="details">AC Güç (kWe)</span>
@@ -104,18 +105,18 @@
                   {{edit_form.DC_Power}}
               </div>
               <div class="input-box">
-                  <span class="details">Hesaplanan Maliyet - KDV Hariç (₺)</span>
-                  {{edit_form.CalculatedCost_NotIncludingKDV}}
+                  <span class="details">Hesaplanan Maliyet - KDV Hariç ($)</span>
+                  <input class="coc-input" type="text" name="CalculatedCost_NotIncludingKDV" id="id_CalculatedCost_NotIncludingKDV" step="0.0001" value="{{project_edit.CalculatedCost_NotIncludingKDV}}">
               </div>
             
               <div class="input-box" name="StartDate">
                 <span class="details">Başlama Tarihi</span>
-                <input style="background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat; " id="id_StartDate" type="date" name="StartDate" value="{{ project_edit.StartDate|date:'Y-m-d' }}" />
+                <input style="background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat; " id="id_StartDate" type="date" name="StartDate" value="{{ project_edit.StartDate|date:'Y-m-d' }}" min='2000-01-01' max='2099-01-01' />
             </div>
             
             <div class="input-box">
               <span class="details">Bitirme Tarihi</span>
-              <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" id="id_FinishDate" type="date" name="FinishDate" value="{{ project_edit.FinishDate|date:'Y-m-d' }}" />
+              <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" id="id_FinishDate" type="date" name="FinishDate" value="{{ project_edit.FinishDate|date:'Y-m-d' }}" min='2000-01-01' max='2099-01-01' />
             </div>
             <div class="input-box">
               <span class="details">KDV Oranı (%)</span>
@@ -168,80 +169,68 @@
           
   {% block js_files %} 
   <script src="{% static 'client.js' %}"></script> 
+  <script>
+
+
+   
+    
+
+
+    var amountInputForFormat1 = document.querySelector("#id_Cost_NotIncludingKDV");
+    var amountInputForFormat2 = document.querySelector("#id_CalculatedCost_NotIncludingKDV");
+    var amountInputReformatBtn = document.querySelector("#project-create-btn");
+    var form = document.querySelector("#my-form");
+    var deger;
+    
+    amountInputReformatBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    amountInputForFormat1.value = clear(deger);
+    amountInputForFormat2.value = clear(deger);
+    form.submit();
+    });
+    onPageLoad(amountInputForFormat1);
+    onPageLoad(amountInputForFormat2);
+    runEventListeners(amountInputForFormat1);
+    runEventListeners(amountInputForFormat2);
+
+
+    function onPageLoad(x) {
+        var inputValue = x.value; 
+        var clearValue = clear(inputValue);
+        var formatValue = format(clearValue);
+        x.value = formatValue;
+        deger = formatValue;
+    }
+
+    
+    function runEventListeners(x){
+    x.addEventListener("input", function(event) {
+        var inputValue = event.target.value;
+        var clearValue = clear(inputValue);
+        var formatValue = format(clearValue);
+        x.value = formatValue;
+        deger = formatValue;
+    });
+    }
+    function clear(value){   // Alfasayısal olmayan ve nokta olmayan karakterleri kaldır   
+    var cleanString = value.replace(/[^0-9.]/g, '');
+    return cleanString;    // Çıktı: "123456.789"     
+    }
+    
+    function format(number) {
+    var indexOfDot = number.indexOf('.');
+    
+    if (indexOfDot !== -1) {
+    var integerPart = number.slice(0, indexOfDot).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var decimalPart = number.slice(indexOfDot + 1);
+    return integerPart + '.' + decimalPart;
+    } else {
+    var formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return formattedNumber; 
+    }
+    }
+  </script>
   
   {% endblock %}
 
   {% endblock %} 
-  
-  <!-- <div class="container projeBaslatContainer">
-    <div class="title">Proje Ekleme</div>
-    <form action="{% url 'project_edit' project_name=project_edit.ProjectName %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="form_type" value="edit_form">
-      <div class="user-details">
-                  <div class="input-box">
-                      <span class="details">Firma Adı</span>
-                      {{ edit_form.CompanyName }}
-                  </div>
-                  
-                  <div style="display:none;" class="input-box">
-                      <span class="details">Proje Adı</span>
-                      {{ edit_form.ProjectName }}
-                  </div>
-                  <div style="display:none;" class="input-box">
-                      <span class="details">Proje Kodu</span>
-                      {{ edit_form.ProjectCode }}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">İşi Üstlenen Firma</span>
-                      {{ edit_form.CompanyUndertakingWork }}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">Konum</span>
-                      {{ edit_form.Location }}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">İş Bedeli - KDV Hariç (₺)</span>
-                      {{ edit_form.Cost_NotIncludingKDV }}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">AC Güç (kWe)</span>
-                      {{edit_form.AC_Power}}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">DC Güç (kWp)</span>
-                      {{edit_form.DC_Power}}
-                  </div>
-                  <div class="input-box">
-                      <span class="details">Hesaplanan Maliyet - KDV Hariç (₺)</span>
-                      {{edit_form.CalculatedCost_NotIncludingKDV}}
-                  </div>
-                
-                <div class="input-box" name="StartDate">
-                  <span class="details">Başlama Tarihi:  {{ project_edit.StartDate|date:"m/d/Y"  }}</span>
-                  <input value="{{ project_edit.StartDate }}" style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat; "id="tarih" type="date" name="StartDate" />
-                </div>
-                <div class="input-box">
-                  <span class="details">Bitirme Tarihi:  {{ project_edit.FinishDate|date:"m/d/Y"  }}</span>
-                  <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" id="tarih2" type="date" name="FinishDate" />
-                </div>
-                <div class="input-box">
-                  <span class="details">KDV Oranı (%)</span>
-                  {{edit_form.KDV_Rate}}
-                </div>
-                <div class="input-box">
-                  <span class="details">Arazi/Çatı</span>
-                  {{edit_form.Terrain_Roof}}
-                </div>
-                <div class="input-box">
-                  <span class="details">Teşvikli (Evet/Hayır)</span>           
-                  {{edit_form.Incentive}}
-                </div>
-      </div>
-        <div class="button">
-        <input id="project-create-btn" type="submit" value="Oluştur" />
-        </div>
-      
-    </form>
-  </div>
--->

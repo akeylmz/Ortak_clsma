@@ -20,23 +20,51 @@ class ProjectForm(forms.ModelForm):
     Cost_NotIncludingKDV = forms.FloatField(required=False)        
     AC_Power = forms.IntegerField(required=False,)
     DC_Power = forms.IntegerField(required=False,)
-    CalculatedCost_NotIncludingKDV = forms.FloatField(required=False,)
-    RealizedCost_NotIncludingKDV = forms.FloatField(required=False,)
+    CalculatedCost_NotIncludingKDV = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
+    RealizedCost_NotIncludingKDV = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
     Incentive = forms.ChoiceField(
         choices=[(False, 'Hayır'), (True, 'Evet')],
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False,
     )
-    CalculatedProfit_Loss = forms.FloatField(required=False,)
-    RealizedProfit_Loss = forms.FloatField(required=False,)
-    CalculatedProfitRate = forms.FloatField(required=False,)
-    RealizedProfitRate = forms.FloatField(required=False,)
+    CalculatedProfit_Loss = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
+    RealizedProfit_Loss = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
+    CalculatedProfitRate = forms.DecimalField(  
+        max_digits=8,
+        decimal_places=4,
+        required=False,
+    )
+    RealizedProfitRate = forms.DecimalField(  
+        max_digits=8,
+        decimal_places=4,
+        required=False,
+    )
     Terrain_Roof = forms.ModelChoiceField(
         queryset=Terrain_Roof.objects.all(),
         required=False,
         empty_label= 'Seçiniz',
     )    
-    KDV_Rate = forms.FloatField(required=False, initial=20.0)
+    KDV_Rate = forms.DecimalField(  
+        max_digits=6,
+        decimal_places=4,
+        required=False,
+    )
     Situation = forms.ModelChoiceField(
         queryset=Situations.objects.all(),
         required=False,
@@ -89,8 +117,12 @@ class ExpensesForm(forms.ModelForm):
     ExpensDetails_Expenses = forms.ModelChoiceField(
         queryset=Details.objects.all(),
     )
-    Amount_Expenses = forms.FloatField(required=False)
-    Dollar_Rate_Expenses = forms.DecimalField(
+    Amount_Expenses = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
+    Dollar_Rate_Expenses = forms.DecimalField(  
         max_digits=8,
         decimal_places=4,
         required=False,
@@ -135,7 +167,11 @@ class JobHistoryForm(forms.ModelForm):
   
     ExpensDetails_JobHistory = forms.CharField(required=False, max_length=1000, initial='Diğer')
     Invoice_No_JobHistory = forms.CharField(required=False, max_length=63)
-    Amount_JobHistory = forms.FloatField(required=False)
+    Amount_JobHistory = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
     Dollar_Rate_JobHistory = forms.DecimalField(
         max_digits=8,
         decimal_places=4,
@@ -166,7 +202,11 @@ class IncomesForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False
     )
-    Amount_Incomes_Incomes = forms.FloatField(required=False)
+    Amount_Incomes_Incomes = forms.DecimalField(  
+        max_digits=17,
+        decimal_places=4,
+        required=False,
+    )
     Dollar_Rate_Incomes = forms.DecimalField(
         max_digits=8,
         decimal_places=4,

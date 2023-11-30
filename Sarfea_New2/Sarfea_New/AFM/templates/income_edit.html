@@ -35,7 +35,7 @@
     <div class="center">
       <div class="container">
           <div class="title">Gelir Güncelle</div>
-          <form action="{% url 'income_edit' income_id=income_edit.id %}" method="post">
+          <form id="my-form" action="{% url 'income_edit' income_id=income_edit.id %}" method="post">
             {% csrf_token %}
           <div class="user-details">
 
@@ -61,7 +61,7 @@
               </div>
               <div class="input-box" name="Amount_Incomes">
                   <span class="details">Alınan Miktar (₺)</span>
-                  {{ edit_form.Amount_Incomes }}
+                  <input class="coc-input" type="text" name="Amount_Incomes" id="id_Amount_Incomes" step="0.0001" value="{{income_edit.Amount_Incomes}}">
               </div>
               <div class="input-box" name="Dollar_Rate_Incomes">
                   <span class="details">Dolar Kuru (₺)</span>
@@ -74,22 +74,22 @@
               </div>
               <div class="input-box" id="chek_date_box">
                 <span class="details">Tarih </span>
-                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" type="date" name="ChekDate_Incomes" id="id_ChekDate_Incomes" value="{{ income_edit.ChekDate_Incomes|date:'Y-m-d' }}" />
+                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" type="date" name="ChekDate_Incomes" id="id_ChekDate_Incomes" value="{{ income_edit.ChekDate_Incomes|date:'Y-m-d' }}" min='2000-01-01' max='2099-01-01' />
               </div>
               <div class="input-box chek-last-date-box" >
                 <span class="details">Çek Son Kullanma Tarihi </span>
-                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" type="date" name="LastChekDate_Incomes" id="id_LastChekDate_Incomes" value="{{ income_edit.LastChekDate_Incomes|date:'Y-m-d' }}" />
+                <input style = "background:url('{% static 'images/calendar.gif' %}')99% 50% no-repeat;" class="coc-input" type="date" name="LastChekDate_Incomes" id="id_LastChekDate_Incomes" value="{{ income_edit.LastChekDate_Incomes|date:'Y-m-d' }}"  min='2000-01-01' max='2099-01-01' />
             </div>   
             <div class="input-box">
                 <span class="details">Kur Saati</span>
                 <select name="" id="">
-                  <option value="">3'ten Önce</option>
-                  <option value="">3'ten Sonra</option>
+                  <option value="">15:30'dan Önce</option>
+                  <option value="">15:30'dan Sonra</option>
                 </select>
             </div> 
         </div>      
           <div class="button">  
-            <input type="submit" value="Kaydet">
+            <input id="project-create-btn" type="submit" value="Kaydet">
           </div>
           </form>
       </div>
@@ -99,6 +99,61 @@
           
   {% block js_files %} 
   <script src="{% static 'client.js' %}"></script> 
+  <script>
+
+
+
+    var amountInputForFormat = document.querySelector("#id_Amount_Incomes");
+    var amountInputReformatBtn = document.querySelector("#project-create-btn");
+    var form = document.querySelector("#my-form");
+    var deger;
+    
+    amountInputReformatBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    amountInputForFormat.value = clear(deger);
+    form.submit();
+    });          
+
+    runEventListeners();
+    onPageLoad(amountInputForFormat);
+
+    function onPageLoad(x) {
+        var inputValue = x.value; 
+        var clearValue = clear(inputValue);
+        var formatValue = format(clearValue);
+        x.value = formatValue;
+        deger = formatValue;
+    }
+
+
+
+    function runEventListeners(){
+    amountInputForFormat.addEventListener("input", function(event) {
+        var inputValue = event.target.value;
+        var clearValue = clear(inputValue);
+        var formatValue = format(clearValue);
+        amountInputForFormat.value = formatValue;
+        deger = formatValue;
+    });
+    }
+    function clear(value){   // Alfasayısal olmayan ve nokta olmayan karakterleri kaldır   
+    var cleanString = value.replace(/[^0-9.]/g, '');
+    return cleanString;    // Çıktı: "123456.789"     
+    }
+    
+    function format(number) {
+    var indexOfDot = number.indexOf('.');
+    
+    if (indexOfDot !== -1) {
+    var integerPart = number.slice(0, indexOfDot).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var decimalPart = number.slice(indexOfDot + 1);
+    return integerPart + '.' + decimalPart;
+    } else {
+    var formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return formattedNumber; 
+    }
+    }
+  </script>
   
   {% endblock %}
 

@@ -46,92 +46,6 @@ function modalAc(){
 
 }
 
-//-------------------
-document.getElementById("gelir-ac").addEventListener("click", function(){
-    document.querySelector(".gelirWindow").style.display = "flex";
-    if(document.querySelector(".giderWindow").style.display == "flex"){
-        document.querySelector(".giderWindow").style.display = "none";
-    }
-    if(document.querySelector(".projeBaslatWindow").style.display == "flex"){
-        document.querySelector(".projeBaslatWindow").style.display = "none";
-    }
-    if(document.querySelector(".isWindow").style.display == "flex"){
-        document.querySelector(".isWindow").style.display = "none";
-    }
-});
-document.getElementById("gelir-modal").addEventListener("click", function(){
-    document.querySelector(".gelirWindow").style.display = "none";
-});
-
-
-document.getElementById("gider-ac").addEventListener("click", function(){
-    document.querySelector(".giderWindow").style.display = "flex";
-    if(document.querySelector(".gelirWindow").style.display == "flex"){
-        document.querySelector(".gelirWindow").style.display = "none";
-    }
-    if(document.querySelector(".projeBaslatWindow").style.display == "flex"){
-        document.querySelector(".projeBaslatWindow").style.display = "none";
-    }
-    if(document.querySelector(".isWindow").style.display == "flex"){
-        document.querySelector(".isWindow").style.display = "none";
-    }
-});
-document.getElementById("gider-modal").addEventListener("click", function(){
-    document.querySelector(".giderWindow").style.display = "none";
-});
-
-
-document.getElementById("is-ac").addEventListener("click", function(){
-    document.querySelector(".isWindow").style.display = "flex";
-    if(document.querySelector(".giderWindow").style.display == "flex"){
-        document.querySelector(".giderWindow").style.display = "none";modal
-    }
-    if(document.querySelector(".projeBaslatWindow").style.display == "flex"){
-        document.querySelector(".projeBaslatWindow").style.display = "none";
-    }
-    if(document.querySelector(".gelirWindow").style.display == "flex"){
-        document.querySelector(".gelirWindow").style.display = "none";
-    }
-});
-document.getElementById("is-modal").addEventListener("click", function(){
-    document.querySelector(".isWindow").style.display = "none";
-});
-
-
-document.getElementById("project-ac").addEventListener("click", function(){
-    document.querySelector(".projeBaslatWindow").style.display = "flex";
-    if(document.querySelector(".giderWindow").style.display == "flex"){
-        document.querySelector(".giderWindow").style.display = "none";
-    }
-    if(document.querySelector(".gelirWindow").style.display == "flex"){
-        document.querySelector(".gelirWindow").style.display = "none";
-    }
-    if(document.querySelector(".isWindow").style.display == "flex"){
-        document.querySelector(".isWindow").style.display = "none";
-    }
-});
-document.getElementById("project-modal").addEventListener("click", function(){
-    document.querySelector(".projeBaslatWindow").style.display = "none";
-});
-document.getElementById("payingFirmaAdd-modal").addEventListener("click", function(){
-    document.querySelector(".payingFirmaAddWindow").style.display = "none";
-});
-document.getElementById("clientFirmaAdd-modal").addEventListener("click", function(){
-    document.querySelector(".clientFirmaAddWindow").style.display = "none";
-});
-document.getElementById("firma-add-btn").addEventListener("click", function () {
-    document.querySelector(".clientFirmaAddWindow").style.display = "flex";
-  });
-document.getElementById("paying-firma-add-btn").addEventListener("click", function () {
-    document.querySelector(".payingFirmaAddWindow").style.display = "flex";
-  });
-  document.getElementById("paying-firma-add-btn-2").addEventListener("click", function () {
-    document.querySelector(".payingFirmaAddWindow").style.display = "flex";    
-  });
- 
-  document.getElementById("last-date-add-btn").addEventListener("click", function () {
-    document.querySelector(".chek-last-date-box").style.display = "block";
-  });
 //--------------------------------------------//
 
 
@@ -161,3 +75,10 @@ function addUnit(inputId) {
     }
 }
 
+
+
+/* Dolar Kuru Çekme */
+
+  
+  
+ 

@@ -22,6 +22,9 @@ urlpatterns = [
     path('expenses_edit/<int:expenses_id>/', views.expenses_edit, name='expenses_edit'),
     path('jobhistory_edit/<int:jobhistory_id>/', views.jobhistory_edit, name='jobhistory_edit'),
     path('income_edit/<int:income_id>/', views.income_edit, name='income_edit'),
-
+    path("project_add/", views.project_add, name='project_add'),
+    path("expenses_add/", views.expenses_add, name='expenses_add'),
+    path("jobhistory_add/", views.jobhistory_add, name='jobhistory_add'),
+    path("income_add/", views.income_add, name='income_add'),
 
 ]
