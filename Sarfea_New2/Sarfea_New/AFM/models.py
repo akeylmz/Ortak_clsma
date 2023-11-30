@@ -120,6 +120,7 @@ class Incomes(models.Model):
     ProjectName_Incomes_Copy = models.CharField(max_length=63, blank=True, null=True)
     ProjectName_Incomes = models.CharField(max_length=63, blank=True, null=True)
     CompanyName_ReceivePayment_Incomes = models.CharField(max_length=63, blank=True, null=True)
+    CompanyName_Pay_Incomes = models.CharField(max_length=63, blank=True, null=True)
     Amount_Incomes = FourDecimalField(blank=True, null=True)
     Dollar_Rate_Incomes = FourDecimalField(blank=True, null=True)
     PaymentType_Incomes = models.CharField(max_length=63, blank=True, null=True)     

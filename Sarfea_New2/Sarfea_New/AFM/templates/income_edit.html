@@ -59,6 +59,21 @@
                   {% endfor %}
                 </select>
               </div>
+              <div class="input-box">
+                <span class="details">Ödeyen Firma</span>
+                <select required class="js-example-basic-single" name="CompanyName_Pay_Incomes" id="id_CompanyName_Pay_Incomes">
+                  {% for x in client %}
+                    {% if income_edit.CompanyName_Pay_Incomes == x.CompanyName_Clients  %}
+                      <option value="{{x.id}}" selected>{{ income_edit.CompanyName_Pay_Incomes }}</option>
+                    {% endif %}
+                  {% endfor %}
+                  {% for x in client %}
+                    {% if income_edit.CompanyName_Pay_Incomes != x.CompanyName_Clients  %}
+                      <option value="{{x.id}}">{{x.CompanyName_Clients}}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
               <div class="input-box" name="Amount_Incomes">
                   <span class="details">Alınan Miktar (₺)</span>
                   <input class="coc-input" type="text" name="Amount_Incomes" id="id_Amount_Incomes" step="0.0001" value="{{income_edit.Amount_Incomes}}">
@@ -100,9 +115,6 @@
   {% block js_files %} 
   <script src="{% static 'client.js' %}"></script> 
   <script>
-
-
-
     var amountInputForFormat = document.querySelector("#id_Amount_Incomes");
     var amountInputReformatBtn = document.querySelector("#project-create-btn");
     var form = document.querySelector("#my-form");

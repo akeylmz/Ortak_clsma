@@ -56,6 +56,7 @@ def jobhistory_edit(request, jobhistory_id):
 def income_edit(request, income_id):
     income_edit = get_object_or_404(Incomes, id=income_id)
     my_company = MyCompanyNames.objects.all()
+    client = Clients.objects.all()
 
     if request.method == 'POST':
         edit_form = IncomesForm(request.POST, instance=income_edit)
@@ -69,14 +70,16 @@ def income_edit(request, income_id):
     context = {
         'edit_form': edit_form,
         'income_edit': income_edit,
-        'my_company': my_company
+        'my_company': my_company,
+        'client': client
+
     }
     return render(request, "income_edit.html", context)
 
 def supplier_edit(request, supplier_name):
     supplier_edit = get_object_or_404(Supplier, CompanyName_Supplier=supplier_name)
     locations = Locations.objects.all()
-   
+
     if request.method == 'POST':
         edit_form = SupplierForm(request.POST, instance=supplier_edit)
         

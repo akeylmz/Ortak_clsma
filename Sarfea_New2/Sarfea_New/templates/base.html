@@ -5,18 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width={device-width}, initial-scale=1.0">
 
-       {% block css_files %} 
-
+{% block css_files %} 
 <link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock %}
+<!-- jQuery CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- Select2 CSS ve JS dosyaları -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <title> {% block title %} {% endblock %} </title>
 </head>
 <body>
     {% block content %}{% endblock %}
 
-    
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+    </script>   
     {% block js_files %} <script src="{% static 'bootstrap.min.js' %}"></script>{% endblock %}
-
-   
 </body>
 </html>
