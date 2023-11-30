@@ -154,9 +154,14 @@
         deger = formatValue;
     });
     }
-    function clear(value){   // Alfasayısal olmayan ve nokta olmayan karakterleri kaldır   
-    var cleanString = value.replace(/[^0-9.]/g, '');
-    return cleanString;    // Çıktı: "123456.789"     
+    function clear(value){   // Alfasayısal olmayan ve nokta olmayan karakterleri kaldır       
+    if(value != undefined){
+        var cleanString = value.replace(/[^0-9.]/g, '');
+        return cleanString;    // Çıktı: "123456.789"  
+    }else{
+        var  cleanString = 0;
+        return cleanString;
+    } 
     }
     
     function format(number) {
